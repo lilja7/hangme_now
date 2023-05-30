@@ -39,8 +39,11 @@ dependencies:
   flutter_native_splash: ^2.3.0
 
 flutter_native_splash:
-  color: "#360B3F"
-  image: assets/bones.png
+  android: true
+  ios: true
+  web: false
+  color: "#000000"
+  image: assets/skullpix.png
 
 dev_dependencies:
   flutter_test:

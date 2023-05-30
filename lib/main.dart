@@ -1,9 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hangme_now/hangman_man.dart';
 import 'package:hangme_now/game.dart';
+import 'dart:async';
 
-void main() {
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  await Future.delayed(const Duration(seconds: 3));
+  FlutterNativeSplash.remove();
+
   runApp(const HangmanApp());
 }
 
