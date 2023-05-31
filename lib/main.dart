@@ -20,12 +20,18 @@ class HangmanApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Hangman',
-      theme: ThemeData(
-        brightness: Brightness.dark,
-      ),
+      theme: _buildTheme(Brightness.dark),
       home: const HangmanScreen(),
     );
   }
+}
+
+ThemeData _buildTheme(brightness) {
+  var baseTheme = ThemeData(brightness: brightness);
+
+  return baseTheme.copyWith(
+    textTheme: GoogleFonts.pangolinTextTheme(baseTheme.textTheme),
+  );
 }
 
 class HangmanScreen extends StatefulWidget {
@@ -38,15 +44,16 @@ class _HangmanScreenState extends State<HangmanScreen> {
   Hangman hangman = Hangman();
   int hangmanGraphicIndex = 0;
   bool showHint = false;
+  bool wrongGuessIncrement = false;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        title: Text(
+        title: const Text(
           'H_NGM_N',
-          style: GoogleFonts.pangolin(textStyle: const TextStyle(fontSize: 27)),
+          style: TextStyle(fontSize: 27),
         ),
       ),
       body: Column(
@@ -64,21 +71,17 @@ class _HangmanScreenState extends State<HangmanScreen> {
                     const SizedBox(height: 16),
                     Text(
                       'Word: ${hangman.getCurrentState()}',
-                      style: GoogleFonts.pangolin(
-                          textStyle: const TextStyle(fontSize: 24)),
+                      style: const TextStyle(fontSize: 24),
                     ),
                     const SizedBox(height: 16),
-                    Text(
+                    const Text(
                       'the category is CHEESE!',
-                      style: GoogleFonts.pangolin(
-                          textStyle: const TextStyle(fontSize: 12)),
+                      style: TextStyle(fontSize: 12),
                     ),
                     if (showHint) //Takki með hint. ON eða OFF
                       Text(
                         'Hint: ${hangman.hint}',
-                        style: GoogleFonts.pangolin(
-                          textStyle: const TextStyle(fontSize: 12),
-                        ),
+                        style: const TextStyle(fontSize: 12),
                       ),
                     const SizedBox(height: 16),
                     Center(
@@ -91,44 +94,48 @@ class _HangmanScreenState extends State<HangmanScreen> {
                         children: List.generate(26, (index) {
                           var letter = String.fromCharCode(index + 65);
                           return ElevatedButton(
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: Colors.black,
-                              textStyle: const TextStyle(fontSize: 18),
-                            ),
-                            onPressed: () {
-                              setState(
-                                () {
-                                  makeGuess(letter);
-                                },
-                              );
-                            },
-                            child: Text(letter),
-                          );
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: Colors.black,
+                                textStyle: const TextStyle(fontSize: 18),
+                              ),
+                              onPressed: () {
+                                setState(
+                                  () {
+                                    makeGuess(letter);
+                                  },
+                                );
+                              },
+                              child: Text(
+                                letter,
+                                style: const TextStyle(fontSize: 16),
+                              ));
                         }),
                       ),
                     ),
                     const SizedBox(height: 16),
                     Text(
                       'Wrong Guesses: ${hangman.wrongGuesses}/${hangman.maxWrongGuesses}', //Telur hversu margar villur
-                      style: GoogleFonts.pangolin(
-                        textStyle: const TextStyle(fontSize: 18),
-                      ),
+                      style: const TextStyle(fontSize: 18),
                     ),
                     ElevatedButton(
+                      //GISK takki!
                       onPressed: () {
-                        setState(() {
-                          showHint;
-                          hangman.wrongGuesses += 1;
-                        });
+                        setState(
+                          () {
+                            showHint = true;
+                            if (!wrongGuessIncrement) {
+                              hangman.wrongGuesses += 1;
+                              wrongGuessIncrement = true;
+                            } //bæta við vitlaus gisk ++
+                          },
+                        );
                       },
                       style: ElevatedButton.styleFrom(
-                          //Hint takkinn
                           backgroundColor: Colors.black,
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(8),
                           )),
-                      child: Text(showHint ? 'Hide Hint' : 'Show Hint',
-                          style: GoogleFonts.pangolin()),
+                      child: const Text('Show Hint'),
                     ),
                   ],
                 ),
@@ -155,12 +162,9 @@ class _HangmanScreenState extends State<HangmanScreen> {
         context: context,
         builder: (BuildContext context) {
           return AlertDialog(
-            title: Text(
+            title: const Text(
               'Game Over!',
-              style: GoogleFonts.pangolin(
-                textStyle:
-                    const TextStyle(fontSize: 30, color: Colors.redAccent),
-              ),
+              style: TextStyle(fontSize: 30, color: Colors.pinkAccent),
             ),
             content: Text(
               hangman.isWordGuessed()
@@ -168,18 +172,21 @@ class _HangmanScreenState extends State<HangmanScreen> {
                       .toUpperCase()
                   : 'Game over loser! The word was: ${hangman.word}.'
                       .toUpperCase(),
-              style: GoogleFonts.pangolin(),
             ),
             actions: [
               TextButton(
                 onPressed: () {
-                  setState(() {
-                    hangman = Hangman();
-                    hangmanGraphicIndex = 0;
-                  });
+                  setState(
+                    () {
+                      hangman = Hangman();
+                      hangmanGraphicIndex = 0;
+                      showHint = false;
+                      wrongGuessIncrement = false;
+                    },
+                  );
                   Navigator.of(context).pop();
                 },
-                child: Text('Go Again', style: GoogleFonts.pangolin()),
+                child: const Text('Go Again'),
               ),
             ],
           );
