@@ -84,7 +84,7 @@ class _HangmanScreenState extends State<HangmanScreen> {
                     ),
                     const SizedBox(height: 12),
                     Text(
-                      'Incorrect Letters: ${incorrectLetters.join(', ')}', // Display incorrect letters
+                      'Incorrect Letters: ${incorrectLetters.join(', ')}', //vitlausir stafir
                       style: const TextStyle(fontSize: 14),
                     ),
                     const SizedBox(height: 12),
@@ -191,7 +191,7 @@ class _HangmanScreenState extends State<HangmanScreen> {
                 children: [
                   TextSpan(
                     text: hangman.isWordGuessed()
-                        ? 'YAY, You did it! The word was: '
+                        ? 'YAY, you did it! The word was: '
                         : 'Game over loser! The word was: ',
                   ),
                   TextSpan(
