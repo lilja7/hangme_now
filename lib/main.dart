@@ -31,7 +31,8 @@ ThemeData _buildTheme(brightness) {
   var baseTheme = ThemeData(brightness: brightness);
 
   return baseTheme.copyWith(
-    textTheme: GoogleFonts.pangolinTextTheme(baseTheme.textTheme),
+    textTheme: GoogleFonts.cinzelTextTheme(
+        baseTheme.textTheme), //cinzel eða pangolin??
   );
 }
 
@@ -46,6 +47,7 @@ class _HangmanScreenState extends State<HangmanScreen> {
   int hangmanGraphicIndex = 0;
   bool showHint = false;
   bool wrongGuessIncrement = false;
+  List<String> incorrectLetters = [];
 
   @override
   Widget build(BuildContext context) {
@@ -67,24 +69,32 @@ class _HangmanScreenState extends State<HangmanScreen> {
                   mainAxisAlignment:
                       MainAxisAlignment.center, //Höfum þetta allt í miðjunni
                   children: [
-                    HangmanGraphic(
-                        hangmanGraphicIndex: hangmanGraphicIndex), //mynd 0.
-                    const SizedBox(height: 16),
-                    Text(
-                      'Word: ${hangman.getCurrentState()}',
-                      style: const TextStyle(fontSize: 24),
-                    ),
-                    const SizedBox(height: 16),
+                    const SizedBox(height: 12),
                     const Text(
                       'the category is CHEESE!',
                       style: TextStyle(fontSize: 12),
                     ),
+                    const SizedBox(height: 12),
+                    HangmanGraphic(
+                        hangmanGraphicIndex: hangmanGraphicIndex), //mynd 0.
+                    const SizedBox(height: 12),
+                    Text(
+                      'Word: ${hangman.getCurrentState()}',
+                      style: const TextStyle(fontSize: 24),
+                    ),
+                    const SizedBox(height: 12),
+                    Text(
+                      'Incorrect Letters: ${incorrectLetters.join(', ')}', // Display incorrect letters
+                      style: const TextStyle(fontSize: 14),
+                    ),
+                    const SizedBox(height: 12),
+
                     if (showHint) //Textinn sem byrtist þegar ýtt er á HINT takkann
                       Text(
                         'Hint: ${hangman.hint}',
                         style: const TextStyle(fontSize: 12),
                       ),
-                    const SizedBox(height: 16),
+                    const SizedBox(height: 12),
                     Center(
                       child: GridView.count(
                         //'Lyklaborðið'
@@ -113,7 +123,7 @@ class _HangmanScreenState extends State<HangmanScreen> {
                         }),
                       ),
                     ),
-                    const SizedBox(height: 16),
+                    const SizedBox(height: 12),
                     Text(
                       'Wrong Guesses: ${hangman.wrongGuesses}/${hangman.maxWrongGuesses}', //Telur hversu margar villur
                       style: const TextStyle(fontSize: 18),
@@ -154,6 +164,7 @@ class _HangmanScreenState extends State<HangmanScreen> {
       if (isWrongGuess) {
         //Ef valið vitlaust þá bætist við 'hangmanninn' myndNr.0 , 1 , 2...
         hangmanGraphicIndex++;
+        incorrectLetters.add(letter);
       }
     });
     if (hangman.isGameOver()) {
@@ -163,16 +174,30 @@ class _HangmanScreenState extends State<HangmanScreen> {
         context: context,
         builder: (BuildContext context) {
           return AlertDialog(
-            title: const Text(
-              'Game Over!',
-              style: TextStyle(fontSize: 30, color: Colors.pinkAccent),
+            title: const Center(
+              child: Text(
+                'Game Over!',
+                style: TextStyle(fontSize: 30, color: Colors.pinkAccent),
+              ),
             ),
-            content: Text(
-              hangman.isWordGuessed()
-                  ? 'YAY, You did it! The word was: ${hangman.word}'
-                      .toUpperCase()
-                  : 'Game over loser! The word was: ${hangman.word}.'
-                      .toUpperCase(),
+            content: RichText(
+              text: TextSpan(
+                style: const TextStyle(fontSize: 16),
+                children: [
+                  TextSpan(
+                    text: hangman.isWordGuessed()
+                        ? 'YAY, You did it! The word was: '
+                        : 'Game over loser! The word was: ',
+                  ),
+                  TextSpan(
+                    text: hangman.word.toUpperCase(),
+                    style: const TextStyle(
+                      color: Colors.pinkAccent,
+                      fontSize: 18,
+                    ),
+                  ),
+                ],
+              ),
             ),
             actions: [
               TextButton(
@@ -184,6 +209,7 @@ class _HangmanScreenState extends State<HangmanScreen> {
                       hangmanGraphicIndex = 0;
                       showHint = false;
                       wrongGuessIncrement = false;
+                      incorrectLetters.clear();
                     },
                   );
                   Navigator.of(context).pop();
