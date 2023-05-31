@@ -26,6 +26,7 @@ class HangmanApp extends StatelessWidget {
   }
 }
 
+//Fontur fyrir allt - dökkt þema.
 ThemeData _buildTheme(brightness) {
   var baseTheme = ThemeData(brightness: brightness);
 
@@ -78,7 +79,7 @@ class _HangmanScreenState extends State<HangmanScreen> {
                       'the category is CHEESE!',
                       style: TextStyle(fontSize: 12),
                     ),
-                    if (showHint) //Takki með hint. ON eða OFF
+                    if (showHint) //Textinn sem byrtist þegar ýtt er á HINT takkann
                       Text(
                         'Hint: ${hangman.hint}',
                         style: const TextStyle(fontSize: 12),
@@ -151,7 +152,7 @@ class _HangmanScreenState extends State<HangmanScreen> {
     bool isWrongGuess = !hangman.makeGuess(letter);
     setState(() {
       if (isWrongGuess) {
-        //Ef valið vitlaust þá bætist við 'kallinn' myndNr.0 , 1 , 2...
+        //Ef valið vitlaust þá bætist við 'hangmanninn' myndNr.0 , 1 , 2...
         hangmanGraphicIndex++;
       }
     });
@@ -176,6 +177,7 @@ class _HangmanScreenState extends State<HangmanScreen> {
             actions: [
               TextButton(
                 onPressed: () {
+                  //Núllstilla allt fyrir nýjan leik
                   setState(
                     () {
                       hangman = Hangman();

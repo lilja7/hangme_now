@@ -27,10 +27,12 @@ class Hangman {
     return currentState.trim();
   }
 
+//Leikurinn klárast ef allir stafir giskaðir rétt eða ef vitlaus gisk eru fleiri en max gisk.
   bool isGameOver() {
     return isWordGuessed() || wrongGuesses >= maxWrongGuesses;
   }
 
+//Loopa til að tékka hvort player hafi giskað réttan staf
   bool isWordGuessed() {
     for (int i = 0; i < word.length; i++) {
       if (!guessedLetters.contains(word[i])) {
@@ -45,7 +47,7 @@ class Hangman {
     if (guessedLetters.contains(letter)) {
       return false;
     }
-    guessedLetters.add(letter);
+    guessedLetters.add(letter); //Ef vitlaust gisk þá ++
     if (!word.contains(letter)) {
       wrongGuesses++;
       return false;
@@ -54,6 +56,7 @@ class Hangman {
   }
 }
 
+//Oh my cheese!
 List<String> words = [
   'cheddar',
   'mozzarella',
@@ -66,6 +69,7 @@ List<String> words = [
   'provolone',
 ];
 
+// Ostahintin góðu
 List<String> hints = [
   'Yellowish cheese',
   'Italian cheese, often used on pizza',
