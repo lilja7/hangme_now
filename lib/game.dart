@@ -13,6 +13,7 @@ class Hangman {
     hint = hints[randomWordIndex];
   }
 
+//updatar orðið eftir því sem player giskar
   String getCurrentState() {
     String currentState = '';
     for (int i = 0; i < word.length; i++) {
