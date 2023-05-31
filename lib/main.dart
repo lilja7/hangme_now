@@ -117,7 +117,8 @@ class _HangmanScreenState extends State<HangmanScreen> {
                     ElevatedButton(
                       onPressed: () {
                         setState(() {
-                          showHint = !showHint;
+                          showHint;
+                          hangman.wrongGuesses += 1;
                         });
                       },
                       style: ElevatedButton.styleFrom(
