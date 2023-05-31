@@ -76,7 +76,7 @@ class _HangmanScreenState extends State<HangmanScreen> {
                     ),
                     const SizedBox(height: 12),
                     HangmanGraphic(
-                        hangmanGraphicIndex: hangmanGraphicIndex), //mynd 0.
+                        hangmanGraphicIndex: hangmanGraphicIndex), //mynd 0.png
                     const SizedBox(height: 12),
                     Text(
                       'Word: ${hangman.getCurrentState()}',
@@ -106,16 +106,21 @@ class _HangmanScreenState extends State<HangmanScreen> {
                           var letter = String.fromCharCode(index + 65);
                           return ElevatedButton(
                               style: ElevatedButton.styleFrom(
-                                backgroundColor: Colors.black,
+                                backgroundColor:
+                                    incorrectLetters.contains(letter)
+                                        ? Colors.grey
+                                        : Colors.black,
                                 textStyle: const TextStyle(fontSize: 18),
                               ),
-                              onPressed: () {
-                                setState(
-                                  () {
-                                    makeGuess(letter);
-                                  },
-                                );
-                              },
+                              onPressed: incorrectLetters.contains(letter)
+                                  ? null
+                                  : () {
+                                      setState(
+                                        () {
+                                          makeGuess(letter);
+                                        },
+                                      );
+                                    },
                               child: Text(
                                 letter,
                                 style: const TextStyle(fontSize: 16),
@@ -214,7 +219,7 @@ class _HangmanScreenState extends State<HangmanScreen> {
                   );
                   Navigator.of(context).pop();
                 },
-                child: const Text('Go Again'),
+                child: const Text('Play Again'),
               ),
             ],
           );
