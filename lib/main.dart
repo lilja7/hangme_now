@@ -149,7 +149,7 @@ class _HangmanScreenState extends State<HangmanScreen> {
                       style: ElevatedButton.styleFrom(
                           backgroundColor: Colors.black,
                           shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(8),
+                            borderRadius: BorderRadius.circular(10),
                           )),
                       child: const Text('Show Hint'),
                     ),
